@@ -26,6 +26,7 @@ namespace Unity.Reflect.Viewer.UI
         GizmoMode = 17,
         InfoSelect = 18,
         DebugOptions = 19,
+        PopulateOptions = 20
     }
     /// <summary>
     /// Defines a global mode for dialog buttons. For example Help Mode, which makes clicking any dialog button open a help dialog.
@@ -158,6 +159,7 @@ namespace Unity.Reflect.Viewer.UI
         public ArchitectureScale modelScale;
         public DeviceCapability deviceCapability;
         public string themeName;
+        public PopulateOptionData populateOptionData;
 
         public override string ToString()
         {
@@ -166,7 +168,7 @@ namespace Unity.Reflect.Viewer.UI
                 "HelpModeEntryId {9}, ActiveToolbar {10} , ActiveOptionDialog {11}, SettingsDialogState {12}, " +
                 "NavigationState {13}, CameraOptionData {14}, SceneOptionData {15}, ProjectOptionIndex {16}, " +
                 "SunStudyData {17}, ProgressData {18}, BimGroup {19}, FilterGroup {20}, LandingScreenFilterData {21}, ModelScale {22}, DeviceCapability {23}, " +
-                "ThemeName {24}");
+                "ThemeName {24}, PopulateOptionData {25}");
         }
 
         public string ToString(string format)
@@ -196,7 +198,8 @@ namespace Unity.Reflect.Viewer.UI
                 landingScreenFilterData,
                 modelScale,
                 deviceCapability,
-                themeName);
+                themeName,
+                populateOptionData);
         }
 
         public override int GetHashCode()
@@ -229,6 +232,7 @@ namespace Unity.Reflect.Viewer.UI
                 hashCode = (hashCode * 397) ^ modelScale.GetHashCode();
                 hashCode = (hashCode * 397) ^ deviceCapability.GetHashCode();
                 hashCode = (hashCode * 397) ^ themeName.GetHashCode();
+                hashCode = (hashCode * 397) ^ populateOptionData.GetHashCode();
 
                 return hashCode;
             }
@@ -257,6 +261,7 @@ namespace Unity.Reflect.Viewer.UI
                 navigationState.Equals(other.navigationState) &&
                 cameraOptionData.Equals(other.cameraOptionData) &&
                 sceneOptionData.Equals(other.sceneOptionData) &&
+                populateOptionData.Equals(other.populateOptionData) &&
                 Equals(selectedProjectOption, other.selectedProjectOption) &&
                 projectOptionIndex == other.projectOptionIndex &&
                 sunStudyData.Equals(other.sunStudyData) &&

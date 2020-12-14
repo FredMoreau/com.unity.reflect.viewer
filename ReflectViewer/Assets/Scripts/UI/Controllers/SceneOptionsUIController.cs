@@ -1,4 +1,4 @@
-﻿using SharpFlux;
+using SharpFlux;
 using TMPro;
 using Unity.TouchFramework;
 using UnityEngine;
@@ -16,6 +16,11 @@ namespace Unity.Reflect.Viewer.UI
         SlideToggle m_TextureToggle;
         [SerializeField]
         SlideToggle m_LightDataToggle;
+
+        // DEMO_MOD
+        [SerializeField]
+        SlideToggle m_TreesToggle;
+
         [SerializeField]
         TMP_Dropdown m_SkyboxDropdown;
         [SerializeField]
@@ -59,6 +64,9 @@ namespace Unity.Reflect.Viewer.UI
 
             m_TextureToggle.onValueChanged.AddListener(OnTextureToggleChanged);
             m_LightDataToggle.onValueChanged.AddListener(OnLightDataToggleChanged);
+
+            m_TreesToggle.onValueChanged.AddListener(OnTreesToggleChanged); // DEMO_MOD
+
             m_SkyboxDropdown.onValueChanged.AddListener(OnSkyboxChanged);
             m_SimulationToggle.onValueChanged.AddListener(OnSimulationToggleChanged);
             m_WeatherDropdown.onValueChanged.AddListener(OnWeatherChanged);
@@ -78,6 +86,10 @@ namespace Unity.Reflect.Viewer.UI
 
             if (m_CurrentsSceneOptionData.enableLightData != data.sceneOptionData.enableLightData)
                 m_LightDataToggle.on = data.sceneOptionData.enableLightData;
+
+            // DEMO_MOD
+            if (m_CurrentsSceneOptionData.enableTrees != data.sceneOptionData.enableTrees)
+                m_TreesToggle.on = data.sceneOptionData.enableTrees;
 
             if (m_CurrentsSceneOptionData.skyboxData != data.sceneOptionData.skyboxData)
             {
@@ -117,6 +129,14 @@ namespace Unity.Reflect.Viewer.UI
         {
             var data = UIStateManager.current.stateData.sceneOptionData;
             data.enableLightData = on;
+            UIStateManager.current.Dispatcher.Dispatch(Payload<ActionTypes>.From(ActionTypes.SetViewOption, data));
+        }
+
+        // DEMO_MOD
+        void OnTreesToggleChanged(bool on)
+        {
+            var data = UIStateManager.current.stateData.sceneOptionData;
+            data.enableTrees = on;
             UIStateManager.current.Dispatcher.Dispatch(Payload<ActionTypes>.From(ActionTypes.SetViewOption, data));
         }
 

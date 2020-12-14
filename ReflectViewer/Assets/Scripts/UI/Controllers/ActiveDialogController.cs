@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using Unity.TouchFramework;
 using UnityEngine;
@@ -71,6 +71,9 @@ namespace Unity.Reflect.Viewer.UI
         [SerializeField]
         DialogWindow m_ARCardSelectionDialog;
 
+        [SerializeField, Tooltip("Reference to the Scene Options Dialog")]
+        DialogWindow m_PopulateOptionsDialog;
+
 #pragma warning restore CS0649
 
         DialogType m_CurrentActiveDialog = DialogType.None;
@@ -104,6 +107,7 @@ namespace Unity.Reflect.Viewer.UI
                 m_InfoSelectDialog.Close();
                 m_DebugOptionsDialog.Close();
                 m_ARCardSelectionDialog.Close();
+                m_PopulateOptionsDialog.Close();
 
                 if (stateData.dialogMode == DialogMode.Help)
                 {
@@ -166,6 +170,9 @@ namespace Unity.Reflect.Viewer.UI
                         break;
                     case DialogType.ARCardSelection:
                         m_ARCardSelectionDialog.Open();
+                        break;
+                    case DialogType.PopulateOptions:
+                        m_PopulateOptionsDialog.Open();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

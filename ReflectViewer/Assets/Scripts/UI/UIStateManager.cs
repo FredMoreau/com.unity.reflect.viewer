@@ -135,6 +135,8 @@ namespace Unity.Reflect.Viewer.UI
         MetadataFilterNode m_MetadataFilter;
         LightFilterNode m_LightFilterNode;
 
+        GameObjectAdvancedReplacerNode m_GameObjectReplacerNode; // DEMO_MOD
+
         void Awake()
         {
             DetectCapabilities();
@@ -611,6 +613,9 @@ namespace Unity.Reflect.Viewer.UI
                 m_ReflectPipeline.OpenProject(projectStateData.activeProject);
                 m_ReflectPipeline.TryGetNode(out m_MetadataFilter);
                 m_ReflectPipeline.TryGetNode(out m_LightFilterNode);
+
+                // DEMO_MOD
+                m_ReflectPipeline.TryGetNode(out m_GameObjectReplacerNode);
             }
 
             m_ReflectPipeline.TryGetNode(out m_SpatialFilter);
@@ -624,6 +629,12 @@ namespace Unity.Reflect.Viewer.UI
             if (m_LightFilterNode != null)
             {
                 m_UIStateData.sceneOptionData.enableLightData = m_LightFilterNode.settings.enableLights;
+            }
+
+            // DEMO_MOD
+            if (m_GameObjectReplacerNode != null)
+            {
+                m_UIStateData.sceneOptionData.enableTrees = m_GameObjectReplacerNode.settings.enableReplacements;
             }
 
             m_BoundingBoxRootNode.SetActive(true);
@@ -647,7 +658,8 @@ namespace Unity.Reflect.Viewer.UI
             {
                 bimFilterEnabled = true,
                 sceneOptionEnabled = true,
-                sunStudyEnabled = true
+                sunStudyEnabled = true,
+                populateOptionsEnabled = true // ADDING_A_TOOLBAR
             };
 
             stateChanged?.Invoke(m_UIStateData);
@@ -949,6 +961,13 @@ namespace Unity.Reflect.Viewer.UI
                     {
                         m_LightFilterNode.settings.enableLights = sceneOptionData.enableLightData;
                         m_LightFilterNode.processor.RefreshLights();
+                    }
+
+                    // DEMO_MOD
+                    if (m_GameObjectReplacerNode != null && sceneOptionData.enableTrees != m_UIStateData.sceneOptionData.enableTrees)
+                    {
+                        m_GameObjectReplacerNode.settings.enableReplacements = sceneOptionData.enableTrees;
+                        m_GameObjectReplacerNode.processor.RefreshObjects();
                     }
 
                     m_UIStateData.sceneOptionData = sceneOptionData;

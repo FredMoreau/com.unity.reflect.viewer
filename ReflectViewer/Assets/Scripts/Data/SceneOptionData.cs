@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace Unity.Reflect.Viewer.UI
@@ -59,6 +59,9 @@ namespace Unity.Reflect.Viewer.UI
         // View Options
         public bool enableTexture;
         public bool enableLightData;
+
+        public bool enableTrees; // DEMO_MOD
+
         public SkyboxData skyboxData;
 
         // Climate Data
@@ -68,7 +71,8 @@ namespace Unity.Reflect.Viewer.UI
         
         public bool Equals(SceneOptionData other)
         {
-            return enableTexture == other.enableTexture && enableLightData == other.enableLightData && skyboxData.Equals(other.skyboxData) &&
+            return enableTexture == other.enableTexture && enableLightData == other.enableLightData &&
+                /*DEMO_MOD*/ enableTrees == other.enableTrees && skyboxData.Equals(other.skyboxData) &&
                 enableClimateSimulation == other.enableClimateSimulation && weatherType == other.weatherType &&
                 temperature.Equals(other.temperature);
         }
@@ -84,6 +88,7 @@ namespace Unity.Reflect.Viewer.UI
             {
                 var hashCode = enableTexture.GetHashCode();
                 hashCode = (hashCode * 397) ^ enableLightData.GetHashCode();
+                hashCode = (hashCode * 397) ^ enableTrees.GetHashCode();
                 hashCode = (hashCode * 397) ^ skyboxData.GetHashCode();
                 hashCode = (hashCode * 397) ^ enableClimateSimulation.GetHashCode();
                 hashCode = (hashCode * 397) ^ (int) weatherType;
