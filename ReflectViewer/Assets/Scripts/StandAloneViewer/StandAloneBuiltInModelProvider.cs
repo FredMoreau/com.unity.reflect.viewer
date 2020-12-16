@@ -16,7 +16,7 @@ namespace UnityEngine.Reflect.StandAloneViewer
 
         public StandAloneBuiltInModelProvider()
         {
-            m_manifestFolder = Directory.EnumerateDirectories(Path.Combine(Application.streamingAssetsPath, "ReflectStandAloneBuiltInModels"), "*", SearchOption.AllDirectories).FirstOrDefault();
+            m_manifestFolder = Directory.EnumerateDirectories(Path.Combine(Application.streamingAssetsPath, "BuiltInModels"), "*", SearchOption.AllDirectories).FirstOrDefault();
 
             if (m_manifestFolder == null)
             {
