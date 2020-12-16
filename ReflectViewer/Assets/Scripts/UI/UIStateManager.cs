@@ -200,6 +200,9 @@ namespace Unity.Reflect.Viewer.UI
             else
             {
                 m_LeftTopBar.SetActive(false);
+                // connect pipeline events that are otherwise only connect when user logs in
+                ConnectPipelineEvents();
+                ConnectPipelineFactoryEvents();
             }
 
             yield return null;
