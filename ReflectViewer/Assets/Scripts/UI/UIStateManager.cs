@@ -682,8 +682,8 @@ namespace Unity.Reflect.Viewer.UI
 
             //m_UIProjectStateData.activeProject = null;
 
-            //m_UIStateData.statusMessage = $"Opening Local Stand Alone Project...";
-            //stateChanged?.Invoke(m_UIStateData);
+            m_UIStateData.statusMessage = $"Opening Local Stand Alone Project...";
+            stateChanged?.Invoke(m_UIStateData);
 
             //projectStateChanged?.Invoke(projectStateData);
 
