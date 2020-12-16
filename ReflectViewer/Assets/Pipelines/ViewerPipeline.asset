@@ -98,7 +98,9 @@ MonoBehaviour:
           isActive: 1
           maxPerNode: 16
           minPerNode: 6
-          visibleObjectsMax: 10000
+          visibleObjectsMax: 100000
+          useDynamicNbVisibleObjectsMobile: 1
+          useDynamicNbVisibleObjectsDesktop: 0
           displayUnloadedObjectBoundingBoxes: 1
           displayOnlyBoundingBoxes: 0
           boundingBoxPrefab: {fileID: 6188160024377136411, guid: 222a70283ef344a7996531a982646737,
@@ -180,7 +182,7 @@ MonoBehaviour:
         instanceOutput:
           m_Id: 88a81e73-b786-4d75-af34-c6d08230f548
         settings:
-          m_Bypass: 0
+          m_Bypass: 1
           m_InstancesPerFrameLimiter: {fileID: 0}
           m_Limit: 10
     00000004:
@@ -280,7 +282,10 @@ MonoBehaviour:
           - {fileID: 11400000, guid: 504442571853e8c4bbb6bcd76f450922, type: 2}
           - {fileID: 11400000, guid: 465aeb993fe084f58a967dff6eb5864f, type: 2}
           - {fileID: 11400000, guid: 465aeb993fe084f58a967dff6eb5864f, type: 2}
-          filtersUpdated:
+          groupsChanged:
+            m_PersistentCalls:
+              m_Calls: []
+          categoriesChanged:
             m_PersistentCalls:
               m_Calls: []
     0000000A:

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Reflect;
 using Unity.Reflect.IO;
 using UnityEngine.Reflect.Pipeline;
+using UnityEngine.Reflect.StandAloneViewer;
 
 namespace UnityEngine.Reflect.Viewer.Pipeline
 {
@@ -13,6 +14,8 @@ namespace UnityEngine.Reflect.Viewer.Pipeline
         ReflectPipeline m_ReflectPipeline;
 #pragma warning restore CS0649
 
+        [SerializeField] bool m_isStandAloneViewer = default;
+
         public event Action<float> update;
 
         bool m_SyncEnabled = false;
@@ -22,6 +25,10 @@ namespace UnityEngine.Reflect.Viewer.Pipeline
 
         ReflectClient m_Client;
         AuthClient m_AuthClient;
+
+        StandAloneBuiltInModelProvider m_modelProvider;
+
+        public bool IsStandAloneViewer { get => m_isStandAloneViewer; }
 
         public bool TryGetNode<T>(out T node) where T : class, IReflectNode
         {
@@ -57,6 +64,13 @@ namespace UnityEngine.Reflect.Viewer.Pipeline
             var storage = new PlayerStorage();
             storage.SetEnvironment(ProjectServer.ProjectDataPath, true, false);
             storage.SaveProjectData(project);
+        }
+
+        public void OpenStandAloneProject()
+        {
+            m_modelProvider = new StandAloneBuiltInModelProvider();
+
+            m_ReflectPipeline.InitializeAndRefreshPipeline(m_modelProvider);
         }
 
         public void SetSync(bool enabled)

@@ -97,6 +97,9 @@ namespace Unity.Reflect.Viewer.UI
         UIARStateData m_ARStateData;
         [SerializeField, Tooltip("State of the Debug Data")]
         UIDebugStateData m_UIDebugStateData;
+
+        [SerializeField] GameObject m_LeftTopBar;
+
         [SerializeField, Tooltip("State of the Application Data")]
         ApplicationStateData m_ApplicationStateData;
         [SerializeField]
@@ -145,8 +148,11 @@ namespace Unity.Reflect.Viewer.UI
             m_UIProjectStateData.activeProjectThumbnail = null;
             m_ApplicationStateData.qualityStateData = QualityState.defaultData;
 
-            m_LoginManager.userLoggedIn.AddListener(OnUserLoggedIn);
-            m_LoginManager.userLoggedOut.AddListener(OnUserLoggedOut);
+            if (!m_ReflectPipeline.IsStandAloneViewer)
+            {
+                m_LoginManager.userLoggedIn.AddListener(OnUserLoggedIn);
+                m_LoginManager.userLoggedOut.AddListener(OnUserLoggedOut);
+            }
 
             if (s_Current == null)
             {
@@ -184,9 +190,16 @@ namespace Unity.Reflect.Viewer.UI
 
         IEnumerator Start()
         {
-            while (!this.SessionReady() && Time.time < k_Timeout)
+            if (!m_ReflectPipeline.IsStandAloneViewer)
             {
-                yield return null;
+                while (!this.SessionReady() && Time.time < k_Timeout)
+                {
+                    yield return null;
+                }
+            }
+            else
+            {
+                m_LeftTopBar.SetActive(false);
             }
 
             yield return null;
@@ -204,6 +217,11 @@ namespace Unity.Reflect.Viewer.UI
                 OnSessionStateChanged();
                 OnProjectStateChanged();
                 OnARStateChanged();
+            }
+
+            if (m_ReflectPipeline.IsStandAloneViewer)
+            {
+                OpenStandAloneProject();
             }
         }
 
@@ -653,6 +671,65 @@ namespace Unity.Reflect.Viewer.UI
             stateChanged?.Invoke(m_UIStateData);
         }
 
+        void OpenStandAloneProject()
+        {
+            CloseProject();
+
+            CloseAllDialogs();
+
+            //m_UIProjectStateData.activeProject = null;
+
+            //m_UIStateData.statusMessage = $"Opening Local Stand Alone Project...";
+            //stateChanged?.Invoke(m_UIStateData);
+
+            //projectStateChanged?.Invoke(projectStateData);
+
+            if (m_ReflectPipeline != null)
+            {
+                m_ReflectPipeline.OpenStandAloneProject();
+                m_ReflectPipeline.TryGetNode(out m_MetadataFilter);
+                m_ReflectPipeline.TryGetNode(out m_LightFilterNode);
+            }
+
+            m_ReflectPipeline.TryGetNode(out m_SpatialFilter);
+
+            // set enable texture and light
+            if (m_UIStateData.sceneOptionData.enableTexture)
+                Shader.SetGlobalFloat(k_UseTexture, 1);
+            else
+                Shader.SetGlobalFloat(k_UseTexture, 0);
+
+            if (m_LightFilterNode != null)
+            {
+                m_UIStateData.sceneOptionData.enableLightData = m_LightFilterNode.settings.enableLights;
+            }
+
+            m_BoundingBoxRootNode.SetActive(true);
+            if (m_ReflectPipeline.TryGetNode<SpatialFilterNode>(out var spatialFilterNode))
+            {
+                spatialFilterNode.settings.displayOnlyBoundingBoxes = false;
+                m_UIProjectStateData.teleportPicker = new SpatialSelector
+                {
+                    SpatialPicker = m_SpatialFilter.SpatialPicker,
+                    WorldRoot = m_RootNode.transform
+                };
+            }
+
+            // reset the toolbars
+            m_UIStateData.toolbarsEnabled = true;
+            m_UIStateData.toolState.activeTool = ToolType.OrbitTool;
+            m_UIStateData.toolState.orbitType = OrbitType.OrbitAtPoint;
+            m_UIStateData.navigationState.EnableAllNavigation(true);
+
+            m_UIStateData.settingsToolStateData = new SettingsToolStateData
+            {
+                bimFilterEnabled = true,
+                sceneOptionEnabled = true,
+                sunStudyEnabled = true
+            };
+
+            stateChanged?.Invoke(m_UIStateData);
+        }
 
         UIStateData IStore<UIStateData>.Data => m_UIStateData;
 
